@@ -22,19 +22,17 @@
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      position: relative;
-      width: 320px;
-      height: 360px;
+      width: 340px;
     }
 
     h1 {
       color: #ff4d6d;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
-    img {
-      width: 120px;
-      margin: 5px;
+    .emojis {
+      font-size: 32px;
+      margin-bottom: 20px;
     }
 
     button {
@@ -54,10 +52,20 @@
     #no {
       background-color: #aaa;
       color: white;
-      position: absolute;
-      left: 110px;
-      bottom: 20px;
-      transition: 0.2s ease;
+    }
+
+    /* حركة كلمة No */
+    #no span {
+      display: inline-block;
+      animation: shake 0.6s infinite alternate;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(5px); }
     }
 
     video {
@@ -71,39 +79,18 @@
 
 <body>
 
-  <div class="box" id="box">
+  <div class="box">
     <h1>Will you be my Valentine? 💖</h1>
 
-    <img src="images/love.png" alt="Love">
-    <img src="images/heart.png" alt="Heart">
-
-    <br><br>
+    <!-- الإيموجيز تحت العنوان -->
+    <div class="emojis">😍 💕 💘 💖</div>
 
     <button id="yes">Yes 💘</button>
-    <button id="no">No 😈</button>
+    <button id="no"><span>No 😈</span></button>
   </div>
 
   <script>
     const yesBtn = document.getElementById("yes");
-    const noBtn = document.getElementById("no");
-    const box = document.getElementById("box");
-
-    function moveNoButton() {
-      const boxRect = box.getBoundingClientRect();
-      const noRect = noBtn.getBoundingClientRect();
-
-      const maxX = boxRect.width - noRect.width;
-      const maxY = boxRect.height - noRect.height;
-
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
-
-      noBtn.style.left = randomX + "px";
-      noBtn.style.top = randomY + "px";
-    }
-
-    noBtn.addEventListener("mouseover", moveNoButton);
-    noBtn.addEventListener("touchstart", moveNoButton);
 
     yesBtn.addEventListener("click", () => {
       document.body.innerHTML = `
@@ -116,7 +103,6 @@
         ">
           <video controls autoplay>
             <source src="video/valentine.mp4" type="video/mp4">
-            Your browser does not support the video tag.
           </video>
         </div>
       `;
