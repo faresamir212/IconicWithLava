@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WILL U BE MY VALENTINE ❤️</title>
+  <title>ICONIC ❤️ LAVA</title>
 
   <style>
     body {
@@ -133,9 +133,9 @@
     <h1>Will you be my Valentine? 💖</h1>
 
     <!-- الأسماء -->
-    <div class="names">ICONIC 🤎 LAVA FOREVER</div>
+    <div class="names">ICONIC ❤️ LAVA FOREVER</div>
 
-    <div class="emojis">🤎🤎🤎🤎</div>
+    <div class="emojis">😍 💕 💘 💖</div>
 
     <div class="counter">محاولات الرفض: <span id="count">0</span></div>
 
@@ -146,7 +146,7 @@
   </div>
 
   <!-- النص النهائي فوق الفيديو -->
-  <div class="final-text" id="finalText">ICONIC with LAVA FOREVER🤎</div>
+  <div class="final-text" id="finalText">ICONIC with LAVA FOREVER</div>
 
   <video id="valentineVideo" controls>
     <source src="path/to/your/video.mp4" type="video/mp4">
@@ -164,6 +164,21 @@
     const video = document.getElementById('valentineVideo');
     const finalText = document.getElementById('finalText');
 
+    // Function to check if device is mobile
+    function isMobile() {
+      return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Function to move "No" button far away
+    function moveNoButtonFar() {
+      const maxX = window.innerWidth - 100;
+      const maxY = window.innerHeight - 100;
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+      noButton.style.left = randomX + 'px';
+      noButton.style.top = randomY + 'px';
+    }
+
     // Countdown timer
     const timer = setInterval(() => {
       timeLeft--;
@@ -178,23 +193,26 @@
       }
     }, 1000);
 
-    // Move "No" button on hover (mouseover)
+    // Move "No" button on hover (mouseover) - more aggressively
     noButton.addEventListener('mouseover', () => {
-      const randomX = Math.random() * (window.innerWidth - 100);
-      const randomY = Math.random() * (window.innerHeight - 100);
-      noButton.style.left = randomX + 'px';
-      noButton.style.top = randomY + 'px';
+      if (!isMobile()) { // Only on desktop
+        moveNoButtonFar();
+      }
     });
 
-    // Click on "No" (increases counter and moves)
+    // Click on "No" (increases counter and moves far)
     noButton.addEventListener('click', () => {
       count++;
       countSpan.textContent = count;
-      // Move the "No" button randomly
-      const randomX = Math.random() * (window.innerWidth - 100);
-      const randomY = Math.random() * (window.innerHeight - 100);
-      noButton.style.left = randomX + 'px';
-      noButton.style.top = randomY + 'px';
+      if (isMobile()) {
+        // On mobile, show message and don't move
+        alert('مينفعش، لازم تدوسي Yes! 😘');
+        // Optionally, move it anyway or just prevent further clicks
+        noButton.style.display = 'none'; // Hide it after message
+      } else {
+        // On desktop, move far
+        moveNoButtonFar();
+      }
     });
 
     yesButton.addEventListener('click', () => {
