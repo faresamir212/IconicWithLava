@@ -109,6 +109,20 @@
       max-width: 600px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: none; /* Initially hidden */
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .final-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ff4d6d;
+      display: none; /* Initially hidden */
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -123,4 +137,84 @@
 
     <div class="emojis">😍 💕 💘 💖</div>
 
-    <div class="counter">محاولات الرفض: <span id="count">0</span>
+    <div class="counter">محاولات الرفض: <span id="count">0</span></div>
+
+    <div class="timer">الوقت المتبقي: <span id="time">10</span> ثانية</div>
+
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+  </div>
+
+  <!-- النص النهائي فوق الفيديو -->
+  <div class="final-text" id="finalText">ICONIC with LAVA FOREVER</div>
+
+  <video id="valentineVideo" controls>
+    <source src="path/to/your/video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <script>
+    let count = 0;
+    let timeLeft = 10; // Countdown starts at 10 seconds
+    const noButton = document.getElementById('no');
+    const yesButton = document.getElementById('yes');
+    const countSpan = document.getElementById('count');
+    const timeSpan = document.getElementById('time');
+    const box = document.getElementById('box');
+    const video = document.getElementById('valentineVideo');
+    const finalText = document.getElementById('finalText');
+
+    // Countdown timer
+    const timer = setInterval(() => {
+      timeLeft--;
+      timeSpan.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        // Force "Yes" by hiding "No" and showing a message or auto-clicking
+        noButton.style.display = 'none';
+        alert('الوقت انتهى! يجب أن تقول نعم! 😘');
+        // Optionally, auto-trigger Yes
+        yesButton.click();
+      }
+    }, 1000);
+
+    // Move "No" button on hover (mouseover)
+    noButton.addEventListener('mouseover', () => {
+      const randomX = Math.random() * (window.innerWidth - 100);
+      const randomY = Math.random() * (window.innerHeight - 100);
+      noButton.style.left = randomX + 'px';
+      noButton.style.top = randomY + 'px';
+    });
+
+    // Click on "No" (increases counter and moves)
+    noButton.addEventListener('click', () => {
+      count++;
+      countSpan.textContent = count;
+      // Move the "No" button randomly
+      const randomX = Math.random() * (window.innerWidth - 100);
+      const randomY = Math.random() * (window.innerHeight - 100);
+      noButton.style.left = randomX + 'px';
+      noButton.style.top = randomY + 'px';
+    });
+
+    yesButton.addEventListener('click', () => {
+      clearInterval(timer); // Stop the timer
+      // Hide the box, show the final text and video
+      box.classList.add('hidden');
+      finalText.style.display = 'block';
+      video.style.display = 'block';
+      // Trigger confetti
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+      }
+    });
+  </script>
+
+</body>
+</html>
