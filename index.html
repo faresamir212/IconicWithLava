@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valentine's Proposal 💖</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ICONIC ❤️ LAVA</title>
 
   <style>
     body {
       height: 100vh;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       overflow: hidden;
-      margin: 0;
     }
 
     .box {
@@ -23,17 +23,38 @@
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      width: 340px;
+      width: 360px;
+      position: relative;
     }
 
     h1 {
+      color: #ff4d6d;
+      margin-bottom: 5px;
+    }
+
+    .names {
+      font-size: 18px;
+      font-weight: bold;
       color: #ff4d6d;
       margin-bottom: 10px;
     }
 
     .emojis {
-      font-size: 32px;
-      margin-bottom: 25px;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .counter {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .timer {
+      font-size: 18px;
+      font-weight: bold;
+      color: red;
+      margin-bottom: 15px;
     }
 
     button {
@@ -43,6 +64,7 @@
       border-radius: 12px;
       cursor: pointer;
       margin: 10px;
+      transition: transform 0.3s;
     }
 
     #yes {
@@ -53,20 +75,33 @@
     #no {
       background-color: #aaa;
       color: white;
+      position: absolute;
     }
 
-    /* حركة كلمة No */
     #no span {
       display: inline-block;
       animation: shake 0.6s infinite alternate;
     }
 
     @keyframes shake {
-      0%   { transform: translateX(0); }
-      25%  { transform: translateX(-6px); }
-      50%  { transform: translateX(6px); }
-      75%  { transform: translateX(-6px); }
-      100% { transform: translateX(6px); }
+      0% { transform: translateX(0); }
+      50% { transform: translateX(-5px); }
+      100% { transform: translateX(5px); }
+    }
+
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      top: -10px;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     video {
@@ -83,33 +118,9 @@
   <div class="box" id="box">
     <h1>Will you be my Valentine? 💖</h1>
 
-    <!-- الإيموجيز تحت السؤال -->
+    <!-- الأسماء -->
+    <div class="names">ICONIC ❤️ LAVA FOREVER</div>
+
     <div class="emojis">😍 💕 💘 💖</div>
 
-    <button id="yes">Yes 💘</button>
-    <button id="no"><span>No 😈</span></button>
-  </div>
-
-  <script>
-    const yesBtn = document.getElementById("yes");
-
-    yesBtn.addEventListener("click", () => {
-      document.body.innerHTML = `
-        <div style="
-          height:100vh;
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-        ">
-          <video controls autoplay muted>
-            <source src="video/valentine.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      `;
-    });
-  </script>
-
-</body>
-</html>
+    <div class="counter">محاولات الرفض: <span id="count">0</span>
