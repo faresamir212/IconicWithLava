@@ -23,6 +23,8 @@
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       position: relative;
+      width: 320px;
+      height: 360px;
     }
 
     h1 {
@@ -31,8 +33,8 @@
     }
 
     img {
-      width: 200px;
-      margin-bottom: 15px;
+      width: 120px;
+      margin: 5px;
     }
 
     button {
@@ -53,6 +55,9 @@
       background-color: #aaa;
       color: white;
       position: absolute;
+      left: 110px;
+      bottom: 20px;
+      transition: 0.2s ease;
     }
 
     video {
@@ -72,10 +77,10 @@
     <img src="images/love.png" alt="Love">
     <img src="images/heart.png" alt="Heart">
 
-    <br>
+    <br><br>
 
     <button id="yes">Yes 💘</button>
-    <button id="no">No 🤬</button>
+    <button id="no">No 😈</button>
   </div>
 
   <script>
@@ -83,16 +88,23 @@
     const noBtn = document.getElementById("no");
     const box = document.getElementById("box");
 
-    // زر No يروح على زر Yes
-    noBtn.addEventListener("mouseover", () => {
-      const yesRect = yesBtn.getBoundingClientRect();
+    function moveNoButton() {
       const boxRect = box.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
 
-      noBtn.style.left = (yesRect.left - boxRect.left) + "px";
-      noBtn.style.top = (yesRect.top - boxRect.top) + "px";
-    });
+      const maxX = boxRect.width - noRect.width;
+      const maxY = boxRect.height - noRect.height;
 
-    // عند الضغط على Yes يظهر الفيديو
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+    }
+
+    noBtn.addEventListener("mouseover", moveNoButton);
+    noBtn.addEventListener("touchstart", moveNoButton);
+
     yesBtn.addEventListener("click", () => {
       document.body.innerHTML = `
         <div style="
@@ -102,7 +114,7 @@
           align-items:center;
           background:linear-gradient(135deg,#ff9a9e,#fad0c4);
         ">
-          <video controls autoplay muted>
+          <video controls autoplay>
             <source src="video/valentine.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
