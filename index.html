@@ -37,6 +37,13 @@
       color: #ff4d6d;
     }
 
+    #passwordTimer {
+      font-size: 18px;
+      color: #ff4d6d;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
     #passwordBox input {
       padding: 12px;
       width: 100%;
@@ -117,6 +124,7 @@
 <!-- PASSWORD -->
 <div id="passwordScreen">
   <div id="passwordBox">
+    <div id="passwordTimer">Time left: 30 seconds</div>
     <h2>Enter Password 🤎</h2>
     <input type="password" id="passwordInput" placeholder="Password">
     <button onclick="checkPassword()">Enter</button>
@@ -158,16 +166,38 @@
 
 <script>
   const CORRECT_PASSWORD = "iconiclava";
+  let passwordTimeLeft = 30;
+  let passwordTimerInterval;
   let noCount = 0;
   let timeLeft = 10;
   let timerInterval;
 
+  // بدء تايمر الباسورد عند تحميل الصفحة
+  function startPasswordTimer() {
+    passwordTimerInterval = setInterval(() => {
+      passwordTimeLeft--;
+      document.getElementById("passwordTimer").textContent = `Time left: ${passwordTimeLeft} seconds`;
+      if (passwordTimeLeft <= 0) {
+        clearInterval(passwordTimerInterval);
+        document.getElementById("passwordTimer").textContent = "LAVA IN DANGER";
+        // يمكن إضافة إجراء إضافي هنا، مثل إغلاق الشاشة أو عرض رسالة
+        alert("Time's up! LAVA IN DANGER 😱");
+        // أو إعادة توجيه أو إخفاء الشاشة
+        // document.getElementById("passwordScreen").style.display = "none";
+      }
+    }, 1000);
+  }
+
+  // استدعاء التايمر عند تحميل الصفحة
+  window.onload = startPasswordTimer;
+
   function checkPassword() {
     const input = document.getElementById("passwordInput").value;
     if (input === CORRECT_PASSWORD) {
+      clearInterval(passwordTimerInterval);  // إيقاف تايمر الباسورد
       document.getElementById("passwordScreen").style.display = "none";
       document.getElementById("mainContent").style.display = "flex";
-      startTimer();  // بدء التايمر عند دخول الصفحة
+      startTimer();  // بدء التايمر الداخلي
     } else {
       alert("Wrong password 😜");
     }
