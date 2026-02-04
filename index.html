@@ -65,7 +65,7 @@ body{
   min-height:100vh;
   flex-direction:column;
   align-items:center;
-  overflow: auto; /* Added for scrolling if content overflows */
+  overflow: auto;
 }
 
 .box{
@@ -138,7 +138,8 @@ video{
   color:#ff4d6d;
   font-weight:bold;
   text-align:center;
-  margin-top:20px; /* Added margin for spacing under video */
+  margin-top:20px;
+  visibility: hidden; /* Will be set to visible in JS */
 }
 
 /* Dark overlay for timer expiry */
@@ -177,7 +178,7 @@ video{
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  overflow: auto; /* Added for scrolling */
+  overflow: auto;
 }
 
 .secretMsg .box {
@@ -282,10 +283,10 @@ video{
 <div class="secretMsg" id="secretMsgPage">
   <div class="box">
     <h1>Secret Message 🤎</h1>
-    <img id="image1" src="https://via.placeholder.com/200x200?text=Image+1" alt="Image 1" onerror="handleImageError('image1')"> <!-- Placeholder; replace with ./image1.jpg -->
-    <img id="image2" src="https://via.placeholder.com/200x200?text=Image+2" alt="Image 2" onerror="handleImageError('image2')"> <!-- Placeholder; replace with ./image2.jpg -->
+    <img id="image1" src="./image1.jpg" alt="Image 1" onerror="handleImageError('image1')">
+    <img id="image2" src="./image2.jpg" alt="Image 2" onerror="handleImageError('image2')">
     <div class="fallback" id="fallbackMsg">Images not found – but here's the love! 🤎</div>
-    <div class="custom-text">Always together Forever sfoola 🤎</div> <!-- Added custom text under images -->
+    <div class="custom-text">Always together Forever sfoola 🤎</div>
     <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div>
     <button onclick="goBackFromSecret()">Back</button>
   </div>
@@ -367,10 +368,13 @@ document.getElementById("yes").onclick = function() {
 };
 
 document.getElementById("watchVideo").onclick = function() {
+  console.log("Watch Video clicked"); // Debug
   document.getElementById("options").style.display = "none";
   document.getElementById("valentineVideo").style.display = "block";
   document.getElementById("finalText1").style.display = "block";
+  document.getElementById("finalText1").style.visibility = "visible";
   document.getElementById("finalText2").style.display = "block";
+  document.getElementById("finalText2").style.visibility = "visible";
 
   const heartCount = window.innerWidth < 600 ? 15 : 30;
   for (let i = 0; i < heartCount; i++) {
