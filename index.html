@@ -11,8 +11,26 @@ body{
   margin:0;
   font-family:Arial,sans-serif;
   background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-  overflow:hidden;
+  overflow:auto;
 }
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+  from { opacity:0; }
+  to { opacity:1; }
+}
+@keyframes scaleIn {
+  from { transform:scale(.9); opacity:0; }
+  to { transform:scale(1); opacity:1; }
+}
+@keyframes slideUp {
+  from { transform:translateY(30px); opacity:0; }
+  to { transform:translateY(0); opacity:1; }
+}
+
+.fade { animation: fadeIn .6s ease forwards; }
+.scale { animation: scaleIn .6s ease forwards; }
+.slide { animation: slideUp .6s ease forwards; }
 
 /* PASSWORD */
 #passwordScreen{
@@ -32,15 +50,16 @@ body{
   text-align:center;
   box-shadow:0 10px 30px rgba(0,0,0,.2);
   width:320px;
+  animation: scaleIn .6s ease;
 }
 
-#passwordBox h2{color:#ff4d6d;}
 #passwordTimer{
   color:#ff4d6d;
   font-weight:bold;
   margin-bottom:10px;
-  display:block;
 }
+
+#passwordBox h2{color:#ff4d6d;}
 
 #passwordBox input{
   width:100%;
@@ -65,9 +84,7 @@ body{
   min-height:100vh;
   flex-direction:column;
   align-items:center;
-  overflow-y: auto; /* Vertical scroll */
-  max-height: 100vh; /* Fixed height for scroll */
-  padding: 20px; /* Added padding for better spacing */
+  padding:20px;
 }
 
 .box{
@@ -84,8 +101,6 @@ body{
 
 h1{color:#ff4d6d;}
 .emojis{font-size:28px;}
-.counter{font-size:14px;}
-.timer{color:#ff4d6d;font-weight:bold;}
 
 button{
   padding:15px 35px;
@@ -101,8 +116,6 @@ button{
   background:#aaa;
   color:white;
   position:absolute;
-  left: auto;
-  top: auto;
 }
 
 /* SHAKE */
@@ -141,82 +154,41 @@ video{
   font-weight:bold;
   text-align:center;
   margin-top:20px;
-  visibility: hidden;
 }
 
-/* Dark overlay for timer expiry */
-#darkOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  color: white;
-  cursor: pointer;
-  z-index: 10000;
+/* OPTIONS */
+.options{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  margin-top:20px;
 }
 
-/* Options after Yes */
-.options {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
+/* SECRET MSG */
+.secretMsg{
+  display:none;
+  min-height:100vh;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
 }
 
-.options button {
-  margin: 10px;
+.secretMsg .box{
+  max-width:600px;
 }
 
-/* Secret Msg page */
-.secretMsg {
-  display: none;
-  min-height: 100vh;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  overflow: auto;
+.secretMsg img{
+  width:45%;
+  max-width:200px;
+  margin:10px;
+  border-radius:10px;
 }
 
-.secretMsg .box {
-  background: #fff;
-  padding: 30px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,.2);
-  width: 90%;
-  max-width: 600px;
-}
-
-.secretMsg img {
-  width: 45%;
-  max-width: 200px;
-  margin: 10px;
-  border-radius: 10px;
-  display: inline-block;
-}
-
-.secretMsg .hearts {
-  font-size: 28px;
-  margin-top: 20px;
-}
-
-.secretMsg .custom-text {
-  font-size: 20px;
-  color: #ff4d6d;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-.secretMsg .fallback {
-  color: #ff4d6d;
-  font-weight: bold;
-  display: none;
+.custom-text{
+  font-size:20px;
+  color:#ff4d6d;
+  font-weight:bold;
+  margin-top:20px;
 }
 </style>
 </head>
@@ -228,184 +200,112 @@ video{
   <div id="passwordBox">
     <div id="passwordTimer">HURRY LAVA IN DANGER</div>
     <h2>Enter Password 🤎</h2>
-    <input type="password" id="passwordInput" placeholder="Password">
+    <input type="password" id="passwordInput">
     <button onclick="checkPassword()">Enter</button>
   </div>
-</div>
-
-<!-- Dark overlay for timer expiry -->
-<div id="darkOverlay" onclick="resetTimer()">
-  <h1>LAVA اختفت 😱</h1>
-  <p>الحل الوحيد؟ YES 🤎<br>(Click to try again)</p>
 </div>
 
 <!-- MAIN -->
 <div id="mainContent">
 
-  <div class="box" id="box">
+  <div class="box scale" id="box">
     <h1>Will you be my Valentine? 🤎</h1>
     <div class="emojis">🤎🥹</div>
-
-    <div class="counter">
-      محاولات الرفض: <span id="count">0</span>
-    </div>
-
-    <div class="timer">
-      مستوى الحب 🤎: <span id="love">100</span>%
-    </div>
-
-    <div id="message" style="margin-top:10px;font-weight:bold;color:#ff4d6d"></div>
-
+    <p>محاولات الرفض: <span id="count">0</span></p>
+    <p>مستوى الحب 🤎: <span id="love">100</span>%</p>
+    <div id="message" style="color:#ff4d6d;font-weight:bold"></div>
     <button id="yes">Yes</button>
     <button id="no">No</button>
   </div>
 
-  <!-- Options after Yes -->
-  <div class="options" id="options">
+  <div class="options slide" id="options">
     <button id="watchVideo">Watch Video</button>
-    <button id="secretMsg">Secret Msg</button>
+    <button id="secretMsg">Secret Msg 🤎</button>
   </div>
 
-  <video id="valentineVideo" controls muted>
+  <video id="valentineVideo" controls muted class="fade">
     <source src="./video.mp4" type="video/mp4">
-    Your browser does not support the video tag or the video failed to load.
   </video>
 
-  <div class="final-text" id="finalText1">
+  <div class="final-text fade" id="finalText1">
     NO MATTER WHAT HAPPENED<br>IM ALWAYS WITH YOU
   </div>
-
-  <div class="final-text" id="finalText2">
+  <div class="final-text fade" id="finalText2">
     ICONIC WITH LAVA FOREVER 🤎
   </div>
 
 </div>
 
-<!-- Secret Msg Page -->
+<!-- SECRET MSG PAGE -->
 <div class="secretMsg" id="secretMsgPage">
-  <div class="box">
+  <div class="box scale">
     <h1>Secret Message 🤎</h1>
-    <img id="image1" src="https://via.placeholder.com/200x200/ff9a9e/fad0c4?text=Image+1" alt="Image 1" onload="showImage('image1')" onerror="handleImageError('image1')">
-    <img id="image2" src="https://via.placeholder.com/200x200/ff9a9e/fad0c4?text=Image+2" alt="Image 2" onload="showImage('image2')" onerror="handleImageError('image2')">
-    <div class="fallback" id="fallbackMsg">Images not found – but here's the love! 🤎</div>
-    <div class="custom-text">Always together Forever sfoola 🤎</div>
-    <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div>
+
+    <img src="https://via.placeholder.com/200x200?text=Image+1">
+    <img src="https://via.placeholder.com/200x200?text=Image+2">
+
+    <div class="custom-text">
+      Always together forever 🤎
+    </div>
+
     <button onclick="goBackFromSecret()">Back</button>
   </div>
 </div>
 
 <script>
-const CORRECT_PASSWORD = "iconiclava";
-const box = document.getElementById("box");
+const CORRECT_PASSWORD="iconiclava";
+let noCount=0,love=100;
 
-let noCount = 0;
-let love = 100;
-let timeLeft = 10;
-let timer;
-
-const messages = [
-  "متأكد؟ 🥺",
-  "قلبي بيتكسر 🤎",
-  "ده اختيار صعب 😭",
-  "زر No شكله مكسور 😤",
-  "آخر تحذير 😈"
-];
-
-function checkPassword() {
-  const val = document.getElementById("passwordInput").value;
-  if (val === CORRECT_PASSWORD) {
-    document.getElementById("passwordScreen").style.display = "none";
-    document.getElementById("mainContent").style.display = "flex";
-    startTimer();
-  } else {
-    alert("Wrong password 😜");
-  }
+function checkPassword(){
+  if(passwordInput.value===CORRECT_PASSWORD){
+    passwordScreen.style.display="none";
+    mainContent.style.display="flex";
+  }else alert("Wrong password 😜");
 }
 
-function startTimer() {
-  timer = setInterval(() => {
-    timeLeft--;
-    document.getElementById("yes").style.transform = "scale(" + (1 + (10 - timeLeft) * 0.05) + ")";
-
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      document.getElementById("darkOverlay").style.display = "flex";
-    }
-  }, 1000);
-}
-
-function resetTimer() {
-  document.getElementById("darkOverlay").style.display = "none";
-  timeLeft = 10;
-  document.getElementById("yes").style.transform = "scale(1)";
-  startTimer();
-}
-
-document.getElementById("no").onclick = function() {
+no.onclick=()=>{
   noCount++;
-  love = Math.max(0, love - 15);
-
-  document.getElementById("count").textContent = noCount;
-  document.getElementById("love").textContent = love;
-  document.getElementById("message").textContent = messages[Math.min(noCount - 1, messages.length - 1)];
-
+  love=Math.max(0,love-15);
+  count.textContent=noCount;
+  loveSpan.textContent=love;
+  message.textContent="متأكد؟ 🥺";
   box.classList.add("shake");
-  setTimeout(() => box.classList.remove("shake"), 400);
+  setTimeout(()=>box.classList.remove("shake"),400);
 
-  const boxRect = box.getBoundingClientRect();
-  const buttonWidth = this.offsetWidth;
-  const buttonHeight = this.offsetHeight;
-  const maxLeft = boxRect.width - buttonWidth - 20;
-  const maxTop = boxRect.height - buttonHeight - 20;
-  const newLeft = Math.random() * Math.max(0, maxLeft);
-  const newTop = Math.random() * Math.max(0, maxTop);
-  this.style.left = newLeft + "px";
-  this.style.top = newTop + "px";
+  no.style.left=Math.random()*200+"px";
+  no.style.top=Math.random()*200+"px";
 };
 
-document.getElementById("yes").onclick = function() {
-  clearInterval(timer);
-  box.style.display = "none";
-  document.getElementById("options").style.display = "flex";
+yes.onclick=()=>{
+  box.style.display="none";
+  options.style.display="flex";
 };
 
-document.getElementById("watchVideo").onclick = function() {
-  console.log("Watch Video clicked");
-  document.getElementById("options").style.display = "none";
-  document.getElementById("valentineVideo").style.display = "block";
-  document.getElementById("finalText1").style.display = "block";
-  document.getElementById("finalText1").style.visibility = "visible";
-  document.getElementById("finalText2").style.display = "block";
-  document.getElementById("finalText2").style.visibility = "visible";
+watchVideo.onclick=()=>{
+  options.style.display="none";
+  valentineVideo.style.display="block";
+  finalText1.style.display="block";
+  finalText2.style.display="block";
 
-  const heartCount = window.innerWidth < 600 ? 15 : 30;
-  for (let i = 0; i < heartCount; i++) {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.textContent = "🤎";
-    h.style.left = Math.random() * 100 + "%";
+  for(let i=0;i<20;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="🤎";
+    h.style.left=Math.random()*100+"%";
     document.body.appendChild(h);
-    setTimeout(() => h.remove(), 3000);
+    setTimeout(()=>h.remove(),3000);
   }
 };
 
-document.getElementById("secretMsg").onclick = function() {
-  document.getElementById("options").style.display = "none";
-  document.getElementById("secretMsgPage").style.display = "flex";
+secretMsg.onclick=()=>{
+  mainContent.style.display="none";
+  secretMsgPage.style.display="flex";
 };
 
-function showImage(imgId) {
-  document.getElementById(imgId).style.display = "inline-block";
-}
-
-function handleImageError(imgId) {
-  document.getElementById(imgId).style.display = "none";
-  document.getElementById("fallbackMsg").style.display = "block";
-}
-
-function goBackFromSecret() {
-  document.getElementById("secretMsgPage").style.display = "none";
-  document.getElementById("options").style.display = "flex";
+function goBackFromSecret(){
+  secretMsgPage.style.display="none";
+  mainContent.style.display="flex";
+  options.style.display="flex";
 }
 </script>
 
