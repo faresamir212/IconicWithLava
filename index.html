@@ -128,7 +128,7 @@ video{
   text-align:center;
 }
 
-/* Dark overlay for timer expiry (new for time bug fix) */
+/* Dark overlay for timer expiry */
 #darkOverlay {
   position: fixed;
   top: 0;
@@ -143,6 +143,55 @@ video{
   color: white;
   cursor: pointer;
   z-index: 10000;
+}
+
+/* New page styles */
+.newPage {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.newPage .box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  width: 90%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.newPage img {
+  width: 45%;
+  max-width: 200px;
+  margin: 10px;
+  border-radius: 10px;
+  border: 2px dashed #ff4d6d;
+}
+
+.newPage video {
+  width: 90%;
+  max-width: 400px;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+.newPage textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  font-family: Arial, sans-serif;
+}
+
+.newPage input[type="file"] {
+  margin: 10px 0;
 }
 </style>
 </head>
@@ -159,7 +208,7 @@ video{
   </div>
 </div>
 
-<!-- Dark overlay for timer expiry (new) -->
+<!-- Dark overlay for timer expiry -->
 <div id="darkOverlay" onclick="resetTimer()">
   <h1>LAVA اختفت 😱</h1>
   <p>الحل الوحيد؟ YES 🤎<br>(Click to try again)</p>
@@ -201,6 +250,39 @@ video{
 
 </div>
 
+<!-- New Page for Second Option -->
+<div class="newPage" id="newPage">
+  <div class="box">
+    <h1>Special Page for You 🤎</h1>
+    <p>Upload two images and one video, then write your message!</p>
+    
+    <div>
+      <label>Image 1:</label>
+      <input type="file" accept="image/*" onchange="previewImage(this, 'image1')">
+      <img id="image1" src="" alt="Image 1" style="display:none;">
+    </div>
+    
+    <div>
+      <label>Image 2:</label>
+      <input type="file" accept="image/*" onchange="previewImage(this, 'image2')">
+      <img id="image2" src="" alt="Image 2" style="display:none;">
+    </div>
+    
+    <div>
+      <label>Video:</label>
+      <input type="file" accept="video/*" onchange="previewVideo(this)">
+      <video id="newVideo" controls style="display:none;"></video>
+    </div>
+    
+    <div>
+      <label>Your Message:</label>
+      <textarea placeholder="Write something special..."></textarea>
+    </div>
+    
+    <button onclick="goBack()">Back to Proposal</button>
+  </div>
+</div>
+
 <script>
 const CORRECT_PASSWORD = "iconiclava";
 const box = document.getElementById("box");
@@ -236,7 +318,7 @@ function startTimer() {
 
     if (timeLeft <= 0) {
       clearInterval(timer);
-      document.getElementById("darkOverlay").style.display = "flex"; // Show overlay instead of changing body background
+      document.getElementById("darkOverlay").style.display = "flex";
     }
   }, 1000);
 }
@@ -244,7 +326,7 @@ function startTimer() {
 function resetTimer() {
   document.getElementById("darkOverlay").style.display = "none";
   timeLeft = 10;
-  document.getElementById("yes").style.transform = "scale(1)"; // Reset Yes button scale
+  document.getElementById("yes").style.transform = "scale(1)";
   startTimer();
 }
 
@@ -259,11 +341,19 @@ document.getElementById("no").onclick = function() {
   box.classList.add("shake");
   setTimeout(() => box.classList.remove("shake"), 400);
 
-  // Improved bounds for No button: Use box dimensions to keep it inside
+  if (noCount >= 5) {
+    // Second option: Open new page after 5 "No" clicks
+    clearInterval(timer);
+    document.getElementById("mainContent").style.display = "none";
+    document.getElementById("newPage").style.display = "flex";
+    return; // Stop moving the button
+  }
+
+  // Move button for first 4 clicks
   const boxRect = box.getBoundingClientRect();
   const buttonWidth = this.offsetWidth;
   const buttonHeight = this.offsetHeight;
-  const maxLeft = boxRect.width - buttonWidth - 20; // Padding to avoid edges
+  const maxLeft = boxRect.width - buttonWidth - 20;
   const maxTop = boxRect.height - buttonHeight - 20;
   this.style.left = Math.random() * Math.max(0, maxLeft) + "px";
   this.style.top = Math.random() * Math.max(0, maxTop) + "px";
@@ -276,7 +366,6 @@ document.getElementById("yes").onclick = function() {
   document.getElementById("finalText1").style.display = "block";
   document.getElementById("finalText2").style.display = "block";
 
-  // Adaptive heart count for performance
   const heartCount = window.innerWidth < 600 ? 15 : 30;
   for (let i = 0; i < heartCount; i++) {
     const h = document.createElement("div");
@@ -287,6 +376,42 @@ document.getElementById("yes").onclick = function() {
     setTimeout(() => h.remove(), 3000);
   }
 };
+
+function previewImage(input, imgId) {
+  const file = input.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById(imgId).src = e.target.result;
+      document.getElementById(imgId).style.display = "inline-block";
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function previewVideo(input) {
+  const file = input.files[0];
+  if (file) {
+    const video = document.getElementById("newVideo");
+    video.src = URL.createObjectURL(file);
+    video.style.display = "block";
+  }
+}
+
+function goBack() {
+  document.getElementById("newPage").style.display = "none";
+  document.getElementById("mainContent").style.display = "flex";
+  // Reset counters and timer
+  noCount = 0;
+  love = 100;
+  timeLeft = 10;
+  document.getElementById("count").textContent = noCount;
+  document.getElementById("love").textContent = love;
+  document.getElementById("message").textContent = "";
+  document.getElementById("no").style.left = "auto";
+  document.getElementById("no").style.top = "auto";
+  startTimer();
+}
 </script>
 
 </body>
