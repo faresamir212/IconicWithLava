@@ -35,7 +35,12 @@ body{
 }
 
 #passwordBox h2{color:#ff4d6d;}
-#passwordTimer{color:#ff4d6d;font-weight:bold;margin-bottom:10px;}
+#passwordTimer{
+  color:#ff4d6d;
+  font-weight:bold;
+  margin-bottom:10px;
+  display:block; /* Ensure it's always visible */
+}
 
 #passwordBox input{
   width:100%;
@@ -71,7 +76,7 @@ body{
   width:360px;
   max-width:90%;
   margin-top:40px;
-  position:relative;
+  position:relative; /* Added for better button positioning */
 }
 
 h1{color:#ff4d6d;}
@@ -89,7 +94,13 @@ button{
 }
 
 #yes{background:#ff4d6d;color:white;}
-#no{background:#aaa;color:white;position:absolute}
+#no{
+  background:#aaa;
+  color:white;
+  position:absolute;
+  left: auto; /* Reset to default */
+  top: auto;
+}
 
 /* SHAKE */
 @keyframes shake{
@@ -181,11 +192,18 @@ video{
   max-width: 200px;
   margin: 10px;
   border-radius: 10px;
+  display: inline-block; /* Ensure they show */
 }
 
 .secretMsg .hearts {
   font-size: 28px;
   margin-top: 20px;
+}
+
+.secretMsg .fallback {
+  color: #ff4d6d;
+  font-weight: bold;
+  display: none; /* Hidden by default */
 }
 </style>
 </head>
@@ -254,9 +272,11 @@ video{
 <div class="secretMsg" id="secretMsgPage">
   <div class="box">
     <h1>Secret Message 🤎</h1>
-    <img src="./image1.jpg" alt="Image 1"> <!-- Replace with your image path -->
-    <img src="./image2.jpg" alt="Image 2"> <!-- Replace with your image path -->
-    <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div> <!-- Static hearts -->
+    <img id="image1" src="./image1.jpg" alt="Image 1" onerror="handleImageError('image1')">
+    <img id="image2" src="./image2.jpg" alt="Image 2" onerror="handleImageError('image2')">
+    <div class="fallback" id="fallbackMsg">Images not found – but here's the love! 🤎</div>
+    <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div>
+    <button onclick="goBackFromSecret()">Back</button>
   </div>
 </div>
 
@@ -318,20 +338,22 @@ document.getElementById("no").onclick = function() {
   box.classList.add("shake");
   setTimeout(() => box.classList.remove("shake"), 400);
 
-  // Move button for all clicks (no special trigger for upload page)
+  // Improved movement: Ensure button stays within box bounds
   const boxRect = box.getBoundingClientRect();
   const buttonWidth = this.offsetWidth;
   const buttonHeight = this.offsetHeight;
-  const maxLeft = boxRect.width - buttonWidth - 20;
+  const maxLeft = boxRect.width - buttonWidth - 20; // Padding
   const maxTop = boxRect.height - buttonHeight - 20;
-  this.style.left = Math.random() * Math.max(0, maxLeft) + "px";
-  this.style.top = Math.random() * Math.max(0, maxTop) + "px";
+  const newLeft = Math.random() * Math.max(0, maxLeft);
+  const newTop = Math.random() * Math.max(0, maxTop);
+  this.style.left = newLeft + "px";
+  this.style.top = newTop + "px";
 };
 
 document.getElementById("yes").onclick = function() {
   clearInterval(timer);
   box.style.display = "none";
-  document.getElementById("options").style.display = "flex"; // Show options
+  document.getElementById("options").style.display = "flex";
 };
 
 document.getElementById("watchVideo").onclick = function() {
@@ -355,6 +377,16 @@ document.getElementById("secretMsg").onclick = function() {
   document.getElementById("options").style.display = "none";
   document.getElementById("secretMsgPage").style.display = "flex";
 };
+
+function handleImageError(imgId) {
+  document.getElementById(imgId).style.display = "none";
+  document.getElementById("fallbackMsg").style.display = "block";
+}
+
+function goBackFromSecret() {
+  document.getElementById("secretMsgPage").style.display = "none";
+  document.getElementById("options").style.display = "flex";
+}
 </script>
 
 </body>
