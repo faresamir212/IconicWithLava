@@ -17,11 +17,7 @@ body{
 /* PASSWORD */
 #passwordScreen{
   position:fixed;
-  /* Replaced 'inset: 0' for better browser compatibility */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset:0;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -36,16 +32,10 @@ body{
   text-align:center;
   box-shadow:0 10px 30px rgba(0,0,0,.2);
   width:320px;
-  max-width:90%;
 }
 
 #passwordBox h2{color:#ff4d6d;}
-
-#passwordTimer{
-  color:#ff4d6d;
-  font-weight:bold;
-  margin-bottom:10px;
-}
+#passwordTimer{color:#ff4d6d;font-weight:bold;margin-bottom:10px;}
 
 #passwordBox input{
   width:100%;
@@ -86,7 +76,6 @@ body{
 
 h1{color:#ff4d6d;}
 .emojis{font-size:28px;}
-
 .counter{font-size:14px;}
 .timer{color:#ff4d6d;font-weight:bold;}
 
@@ -100,11 +89,7 @@ button{
 }
 
 #yes{background:#ff4d6d;color:white;}
-#no{
-  background:#aaa;
-  color:white;
-  position:absolute;
-}
+#no{background:#aaa;color:white;position:absolute}
 
 /* SHAKE */
 @keyframes shake{
@@ -142,23 +127,6 @@ video{
   font-weight:bold;
   text-align:center;
 }
-
-/* Dark screen overlay for timer expiry */
-#darkOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  color: white;
-  cursor: pointer;
-  z-index: 10000;
-}
 </style>
 </head>
 
@@ -172,12 +140,6 @@ video{
     <input type="password" id="passwordInput" placeholder="Password">
     <button onclick="checkPassword()">Enter</button>
   </div>
-</div>
-
-<!-- Dark overlay for timer expiry -->
-<div id="darkOverlay" onclick="resetTimer()">
-  <h1>LAVA اختفت 😱</h1>
-  <p>الحل الوحيد؟ YES 🤎<br>(Click to try again)</p>
 </div>
 
 <!-- MAIN -->
@@ -201,9 +163,8 @@ video{
     <button id="no">No</button>
   </div>
 
-  <video id="valentineVideo" controls>
+  <video id="valentineVideo" controls muted>
     <source src="./video.mp4" type="video/mp4">
-    Your browser does not support the video tag. Please update or try a different browser.
   </video>
 
   <div class="final-text" id="finalText1">
@@ -217,13 +178,15 @@ video{
 </div>
 
 <script>
-const CORRECT_PASSWORD = "iconiclava";
-let noCount = 0;
-let love = 100;
-let timeLeft = 15; // Extended timer for more forgiveness
+const CORRECT_PASSWORD="iconiclava";
+const box=document.getElementById("box");
+
+let noCount=0;
+let love=100;
+let timeLeft=10;
 let timer;
 
-const messages = [
+const messages=[
   "متأكد؟ 🥺",
   "قلبي بيتكسر 🤎",
   "ده اختيار صعب 😭",
@@ -231,72 +194,62 @@ const messages = [
   "آخر تحذير 😈"
 ];
 
-function checkPassword() {
-  const val = document.getElementById("passwordInput").value;
-  if (val === CORRECT_PASSWORD) {
-    document.getElementById("passwordScreen").style.display = "none";
-    document.getElementById("mainContent").style.display = "flex";
+function checkPassword(){
+  const val=document.getElementById("passwordInput").value;
+  if(val===CORRECT_PASSWORD){
+    document.getElementById("passwordScreen").style.display="none";
+    document.getElementById("mainContent").style.display="flex";
     startTimer();
-  } else {
+  }else{
     alert("Wrong password 😜");
   }
 }
 
-function startTimer() {
-  timer = setInterval(() => {
+function startTimer(){
+  timer=setInterval(()=>{
     timeLeft--;
-    document.getElementById("yes").style.transform = "scale(" + (1 + (15 - timeLeft) * 0.03) + ")"; // Adjusted scaling
-    if (timeLeft <= 0) {
+    document.getElementById("yes").style.transform=
+      "scale("+(1+(10-timeLeft)*0.05)+")";
+
+    if(timeLeft<=0){
       clearInterval(timer);
-      document.getElementById("darkOverlay").style.display = "flex";
+      document.body.style.background="#000";
+      box.innerHTML=
+        "<h1 style='color:white'>LAVA اختفت 😱</h1><p style='color:white'>الحل الوحيد؟ YES 🤎</p>";
     }
-  }, 1000);
+  },1000);
 }
 
-function resetTimer() {
-  document.getElementById("darkOverlay").style.display = "none";
-  timeLeft = 15;
-  startTimer();
-}
-
-document.getElementById("no").onclick = function() {
+document.getElementById("no").onclick=function(){
   noCount++;
-  love = Math.max(0, love - 15);
+  love=Math.max(0,love-15);
 
-  document.getElementById("count").textContent = noCount;
-  document.getElementById("love").textContent = love;
-  document.getElementById("message").textContent = messages[Math.min(noCount - 1, messages.length - 1)];
+  document.getElementById("count").textContent=noCount;
+  document.getElementById("love").textContent=love;
+  document.getElementById("message").textContent=
+    messages[Math.min(noCount-1,messages.length-1)];
 
-  const box = document.getElementById("box");
   box.classList.add("shake");
-  setTimeout(() => box.classList.remove("shake"), 400);
+  setTimeout(()=>box.classList.remove("shake"),400);
 
-  // Improved bounds checking for "No" button to keep it visible
-  const boxRect = box.getBoundingClientRect();
-  const buttonWidth = this.offsetWidth;
-  const buttonHeight = this.offsetHeight;
-  const maxLeft = boxRect.width - buttonWidth - 20; // Padding
-  const maxTop = boxRect.height - buttonHeight - 20;
-  this.style.left = Math.random() * maxLeft + "px";
-  this.style.top = Math.random() * maxTop + "px";
+  this.style.left=Math.random()*240+"px";
+  this.style.top=Math.random()*160+"px";
 };
 
-document.getElementById("yes").onclick = function() {
+document.getElementById("yes").onclick=function(){
   clearInterval(timer);
-  document.getElementById("box").style.display = "none";
-  document.getElementById("valentineVideo").style.display = "block";
-  document.getElementById("finalText1").style.display = "block";
-  document.getElementById("finalText2").style.display = "block";
+  box.style.display="none";
+  document.getElementById("valentineVideo").style.display="block";
+  document.getElementById("finalText1").style.display="block";
+  document.getElementById("finalText2").style.display="block";
 
-  // Fewer hearts on smaller screens for performance
-  const heartCount = window.innerWidth < 600 ? 15 : 30;
-  for (let i = 0; i < heartCount; i++) {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.textContent = "🤎";
-    h.style.left = Math.random() * 100 + "%";
+  for(let i=0;i<30;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="🤎";
+    h.style.left=Math.random()*100+"%";
     document.body.appendChild(h);
-    setTimeout(() => h.remove(), 3000);
+    setTimeout(()=>h.remove(),3000);
   }
 };
 </script>
