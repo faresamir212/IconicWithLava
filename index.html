@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ICONIC ❤️ LAVA</title>
+  <title>ICONIC 🤎 LAVA</title>
 
   <style>
     body {
@@ -130,12 +130,11 @@
 <body>
 
   <div class="box" id="box">
-    <h1>Will you be my Valentine? 💖</h1>
+    <h1>Will you be my Valentine? 🤎</h1>
 
     <!-- الأسماء -->
-    <div class="names">ICONIC ❤️ LAVA FOREVER</div>
 
-    <div class="emojis">😍 💕 💘 💖</div>
+    <div class="emojis">🤎🥹</div>
 
     <div class="counter">محاولات الرفض: <span id="count">0</span></div>
 
@@ -146,7 +145,8 @@
   </div>
 
   <!-- النص النهائي فوق الفيديو -->
-  <div class="final-text" id="finalText">ICONIC with LAVA FOREVER</div>
+  <div class="final-text" id="finalText">NO MATTER WHAT HAPPENED IM ALWAYS WITH YOU 
+    ICONIC with LAVA FOREVER🤎</div>
 
   <video id="valentineVideo" controls>
     <source src="path/to/your/video.mp4" type="video/mp4">
@@ -193,25 +193,20 @@
       }
     }, 1000);
 
-    // Move "No" button on hover (mouseover) - more aggressively
+    // Move "No" button on hover (mouseover) - more aggressively (only on desktop)
     noButton.addEventListener('mouseover', () => {
       if (!isMobile()) { // Only on desktop
         moveNoButtonFar();
       }
     });
 
-    // Click on "No" (increases counter and moves far)
+    // Click on "No" (increases counter, moves far, and shows message on mobile)
     noButton.addEventListener('click', () => {
       count++;
       countSpan.textContent = count;
+      moveNoButtonFar(); // Move on all devices
       if (isMobile()) {
-        // On mobile, show message and don't move
-        alert('مينفعش، لازم تدوسي Yes! 😘');
-        // Optionally, move it anyway or just prevent further clicks
-        noButton.style.display = 'none'; // Hide it after message
-      } else {
-        // On desktop, move far
-        moveNoButtonFar();
+        alert('لازم تدوسي Yes! 😘'); // Show message on mobile
       }
     });
 
