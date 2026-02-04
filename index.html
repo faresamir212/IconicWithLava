@@ -127,6 +127,23 @@ video{
   font-weight:bold;
   text-align:center;
 }
+
+/* Dark overlay for timer expiry (new for time bug fix) */
+#darkOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  cursor: pointer;
+  z-index: 10000;
+}
 </style>
 </head>
 
@@ -140,6 +157,12 @@ video{
     <input type="password" id="passwordInput" placeholder="Password">
     <button onclick="checkPassword()">Enter</button>
   </div>
+</div>
+
+<!-- Dark overlay for timer expiry (new) -->
+<div id="darkOverlay" onclick="resetTimer()">
+  <h1>LAVA اختفت 😱</h1>
+  <p>الحل الوحيد؟ YES 🤎<br>(Click to try again)</p>
 </div>
 
 <!-- MAIN -->
@@ -165,6 +188,7 @@ video{
 
   <video id="valentineVideo" controls muted>
     <source src="./video.mp4" type="video/mp4">
+    Your browser does not support the video tag or the video failed to load.
   </video>
 
   <div class="final-text" id="finalText1">
@@ -178,15 +202,15 @@ video{
 </div>
 
 <script>
-const CORRECT_PASSWORD="iconiclava";
-const box=document.getElementById("box");
+const CORRECT_PASSWORD = "iconiclava";
+const box = document.getElementById("box");
 
-let noCount=0;
-let love=100;
-let timeLeft=10;
+let noCount = 0;
+let love = 100;
+let timeLeft = 10;
 let timer;
 
-const messages=[
+const messages = [
   "متأكد؟ 🥺",
   "قلبي بيتكسر 🤎",
   "ده اختيار صعب 😭",
@@ -194,62 +218,73 @@ const messages=[
   "آخر تحذير 😈"
 ];
 
-function checkPassword(){
-  const val=document.getElementById("passwordInput").value;
-  if(val===CORRECT_PASSWORD){
-    document.getElementById("passwordScreen").style.display="none";
-    document.getElementById("mainContent").style.display="flex";
+function checkPassword() {
+  const val = document.getElementById("passwordInput").value;
+  if (val === CORRECT_PASSWORD) {
+    document.getElementById("passwordScreen").style.display = "none";
+    document.getElementById("mainContent").style.display = "flex";
     startTimer();
-  }else{
+  } else {
     alert("Wrong password 😜");
   }
 }
 
-function startTimer(){
-  timer=setInterval(()=>{
+function startTimer() {
+  timer = setInterval(() => {
     timeLeft--;
-    document.getElementById("yes").style.transform=
-      "scale("+(1+(10-timeLeft)*0.05)+")";
+    document.getElementById("yes").style.transform = "scale(" + (1 + (10 - timeLeft) * 0.05) + ")";
 
-    if(timeLeft<=0){
+    if (timeLeft <= 0) {
       clearInterval(timer);
-      document.body.style.background="#000";
-      box.innerHTML=
-        "<h1 style='color:white'>LAVA اختفت 😱</h1><p style='color:white'>الحل الوحيد؟ YES 🤎</p>";
+      document.getElementById("darkOverlay").style.display = "flex"; // Show overlay instead of changing body background
     }
-  },1000);
+  }, 1000);
 }
 
-document.getElementById("no").onclick=function(){
-  noCount++;
-  love=Math.max(0,love-15);
+function resetTimer() {
+  document.getElementById("darkOverlay").style.display = "none";
+  timeLeft = 10;
+  document.getElementById("yes").style.transform = "scale(1)"; // Reset Yes button scale
+  startTimer();
+}
 
-  document.getElementById("count").textContent=noCount;
-  document.getElementById("love").textContent=love;
-  document.getElementById("message").textContent=
-    messages[Math.min(noCount-1,messages.length-1)];
+document.getElementById("no").onclick = function() {
+  noCount++;
+  love = Math.max(0, love - 15);
+
+  document.getElementById("count").textContent = noCount;
+  document.getElementById("love").textContent = love;
+  document.getElementById("message").textContent = messages[Math.min(noCount - 1, messages.length - 1)];
 
   box.classList.add("shake");
-  setTimeout(()=>box.classList.remove("shake"),400);
+  setTimeout(() => box.classList.remove("shake"), 400);
 
-  this.style.left=Math.random()*240+"px";
-  this.style.top=Math.random()*160+"px";
+  // Improved bounds for No button: Use box dimensions to keep it inside
+  const boxRect = box.getBoundingClientRect();
+  const buttonWidth = this.offsetWidth;
+  const buttonHeight = this.offsetHeight;
+  const maxLeft = boxRect.width - buttonWidth - 20; // Padding to avoid edges
+  const maxTop = boxRect.height - buttonHeight - 20;
+  this.style.left = Math.random() * Math.max(0, maxLeft) + "px";
+  this.style.top = Math.random() * Math.max(0, maxTop) + "px";
 };
 
-document.getElementById("yes").onclick=function(){
+document.getElementById("yes").onclick = function() {
   clearInterval(timer);
-  box.style.display="none";
-  document.getElementById("valentineVideo").style.display="block";
-  document.getElementById("finalText1").style.display="block";
-  document.getElementById("finalText2").style.display="block";
+  box.style.display = "none";
+  document.getElementById("valentineVideo").style.display = "block";
+  document.getElementById("finalText1").style.display = "block";
+  document.getElementById("finalText2").style.display = "block";
 
-  for(let i=0;i<30;i++){
-    const h=document.createElement("div");
-    h.className="heart";
-    h.textContent="🤎";
-    h.style.left=Math.random()*100+"%";
+  // Adaptive heart count for performance
+  const heartCount = window.innerWidth < 600 ? 15 : 30;
+  for (let i = 0; i < heartCount; i++) {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = "🤎";
+    h.style.left = Math.random() * 100 + "%";
     document.body.appendChild(h);
-    setTimeout(()=>h.remove(),3000);
+    setTimeout(() => h.remove(), 3000);
   }
 };
 </script>
