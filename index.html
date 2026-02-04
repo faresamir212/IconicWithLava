@@ -124,7 +124,7 @@
 <!-- PASSWORD -->
 <div id="passwordScreen">
   <div id="passwordBox">
-    <div id="passwordTimer">HURRY LAVA IN DANGER - Time left: 30 seconds</div>
+    <div id="passwordTimer">HURRY LAVA IN DANGER</div>
     <h2>Enter Password 🤎</h2>
     <input type="password" id="passwordInput" placeholder="Password">
     <button onclick="checkPassword()">Enter</button>
@@ -176,10 +176,9 @@
   function startPasswordTimer() {
     passwordTimerInterval = setInterval(() => {
       passwordTimeLeft--;
-      document.getElementById("passwordTimer").textContent = `HURRY LAVA IN DANGER - Time left: ${passwordTimeLeft} seconds`;
+      // النص يظل ثابتاً "HURRY LAVA IN DANGER" أثناء عمل التايمر
       if (passwordTimeLeft <= 0) {
         clearInterval(passwordTimerInterval);
-        document.getElementById("passwordTimer").textContent = "HURRY LAVA IN DANGER - LAVA IN DANGER";
         alert("Time's up! LAVA IN DANGER 😱");
         // يمكن إضافة إجراء إضافي هنا، مثل إغلاق الشاشة
         // document.getElementById("passwordScreen").style.display = "none";
