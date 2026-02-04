@@ -39,7 +39,7 @@ body{
   color:#ff4d6d;
   font-weight:bold;
   margin-bottom:10px;
-  display:block; /* Ensure it's always visible */
+  display:block;
 }
 
 #passwordBox input{
@@ -65,6 +65,7 @@ body{
   min-height:100vh;
   flex-direction:column;
   align-items:center;
+  overflow: auto; /* Added for scrolling if content overflows */
 }
 
 .box{
@@ -76,7 +77,7 @@ body{
   width:360px;
   max-width:90%;
   margin-top:40px;
-  position:relative; /* Added for better button positioning */
+  position:relative;
 }
 
 h1{color:#ff4d6d;}
@@ -98,7 +99,7 @@ button{
   background:#aaa;
   color:white;
   position:absolute;
-  left: auto; /* Reset to default */
+  left: auto;
   top: auto;
 }
 
@@ -137,6 +138,7 @@ video{
   color:#ff4d6d;
   font-weight:bold;
   text-align:center;
+  margin-top:20px; /* Added margin for spacing under video */
 }
 
 /* Dark overlay for timer expiry */
@@ -175,6 +177,7 @@ video{
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  overflow: auto; /* Added for scrolling */
 }
 
 .secretMsg .box {
@@ -192,7 +195,7 @@ video{
   max-width: 200px;
   margin: 10px;
   border-radius: 10px;
-  display: inline-block; /* Ensure they show */
+  display: inline-block;
 }
 
 .secretMsg .hearts {
@@ -200,10 +203,17 @@ video{
   margin-top: 20px;
 }
 
+.secretMsg .custom-text {
+  font-size: 20px;
+  color: #ff4d6d;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
 .secretMsg .fallback {
   color: #ff4d6d;
   font-weight: bold;
-  display: none; /* Hidden by default */
+  display: none;
 }
 </style>
 </head>
@@ -272,9 +282,10 @@ video{
 <div class="secretMsg" id="secretMsgPage">
   <div class="box">
     <h1>Secret Message 🤎</h1>
-    <img id="image1" src="./image1.jpg" alt="Image 1" onerror="handleImageError('image1')">
-    <img id="image2" src="./image2.jpg" alt="Image 2" onerror="handleImageError('image2')">
+    <img id="image1" src="https://via.placeholder.com/200x200?text=Image+1" alt="Image 1" onerror="handleImageError('image1')"> <!-- Placeholder; replace with ./image1.jpg -->
+    <img id="image2" src="https://via.placeholder.com/200x200?text=Image+2" alt="Image 2" onerror="handleImageError('image2')"> <!-- Placeholder; replace with ./image2.jpg -->
     <div class="fallback" id="fallbackMsg">Images not found – but here's the love! 🤎</div>
+    <div class="custom-text">Always together Forever sfoola 🤎</div> <!-- Added custom text under images -->
     <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div>
     <button onclick="goBackFromSecret()">Back</button>
   </div>
@@ -338,11 +349,10 @@ document.getElementById("no").onclick = function() {
   box.classList.add("shake");
   setTimeout(() => box.classList.remove("shake"), 400);
 
-  // Improved movement: Ensure button stays within box bounds
   const boxRect = box.getBoundingClientRect();
   const buttonWidth = this.offsetWidth;
   const buttonHeight = this.offsetHeight;
-  const maxLeft = boxRect.width - buttonWidth - 20; // Padding
+  const maxLeft = boxRect.width - buttonWidth - 20;
   const maxTop = boxRect.height - buttonHeight - 20;
   const newLeft = Math.random() * Math.max(0, maxLeft);
   const newTop = Math.random() * Math.max(0, maxTop);
