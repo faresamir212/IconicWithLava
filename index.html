@@ -10,6 +10,7 @@
       height: 100vh;
       margin: 0;
       display: flex;
+      flex-direction: column; /* Changed to column for vertical stacking */
       justify-content: center;
       align-items: center;
       font-family: Arial, sans-serif;
@@ -118,11 +119,12 @@
     }
 
     .final-text {
-      font-size: 18px; /* Reduced from 24px for better fit */
+      font-size: 14px; /* Made even smaller for "short size" */
       font-weight: bold;
       color: #ff4d6d;
       display: none; /* Initially hidden */
-      margin-bottom: 10px;
+      margin-top: 10px; /* Added margin for spacing below video */
+      text-align: center;
     }
   </style>
 </head>
@@ -144,14 +146,14 @@
     <button id="no">No</button>
   </div>
 
-  <!-- النص النهائي فوق الفيديو -->
-  <div class="final-text" id="finalText1">NO MATTER WHAT HAPPENED IM ALWAYS WITH YOU</div>
-  <div class="final-text" id="finalText2">ICONIC with LAVA FOREVER🤎</div>
-
-  <video id="valentineVideo" controls>
-    <source src="path/to/your/video.mp4" type="video/mp4">
+  <!-- الفيديو أولاً، ثم النص النهائي أسفله -->
+  <video id="valentineVideo" controls muted> <!-- Added muted for autoplay compatibility -->
+    <source src="video.mp4" type="video/mp4"> <!-- Changed to a local filename; replace with your actual video file -->
     Your browser does not support the video tag.
   </video>
+
+  <div class="final-text" id="finalText1">NO MATTER WHAT HAPPENED IM ALWAYS WITH YOU</div>
+  <div class="final-text" id="finalText2">ICONIC with LAVA FOREVER🤎</div>
 
   <script>
     let count = 0;
@@ -215,9 +217,13 @@
       clearInterval(timer); // Stop the timer
       // Hide the box, show the final text and video
       box.classList.add('hidden');
+      video.style.display = 'block';
       finalText1.style.display = 'block';
       finalText2.style.display = 'block';
-      video.style.display = 'block';
+      // Auto-play the video when shown
+      video.play().catch(error => {
+        console.log('Autoplay failed:', error); // Handle autoplay restrictions
+      });
       // Trigger confetti
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
