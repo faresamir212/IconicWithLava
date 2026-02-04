@@ -58,9 +58,8 @@
 
     /* MAIN CONTENT */
     #mainContent {
-      display: none;
+      display: none;  /* إخفاء المحتوى الرئيسي حتى يتم إدخال كلمة المرور الصحيحة */
       min-height: 100vh;
-      display: flex;
       flex-direction: column;
       align-items: center;
     }
@@ -159,16 +158,58 @@
 
 <script>
   const CORRECT_PASSWORD = "iconiclava";
+  let noCount = 0;
+  let timeLeft = 10;
+  let timerInterval;
 
   function checkPassword() {
     const input = document.getElementById("passwordInput").value;
     if (input === CORRECT_PASSWORD) {
       document.getElementById("passwordScreen").style.display = "none";
       document.getElementById("mainContent").style.display = "flex";
+      startTimer();  // بدء التايمر عند دخول الصفحة
     } else {
       alert("Wrong password 😜");
     }
   }
+
+  function startTimer() {
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      document.getElementById("time").textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        // عند انتهاء الوقت، يمكن إضافة إجراء إضافي إذا لزم الأمر
+      }
+    }, 1000);
+  }
+
+  document.getElementById("yes").addEventListener("click", function() {
+    clearInterval(timerInterval);  // إيقاف التايمر
+    document.getElementById("box").style.display = "none";  // إخفاء الصندوق
+    document.getElementById("valentineVideo").style.display = "block";  // عرض الفيديو
+    document.getElementById("finalText1").style.display = "block";  // عرض النص الأول
+    document.getElementById("finalText2").style.display = "block";  // عرض النص الثاني
+  });
+
+  document.getElementById("no").addEventListener("click", function() {
+    noCount++;
+    document.getElementById("count").textContent = noCount;
+    timeLeft = Math.max(1, timeLeft - 1);  // تقليل الوقت لكن لا يقل عن 1
+    document.getElementById("time").textContent = timeLeft;
+
+    // تغيير موضع زر "No" عشوائياً لجعله أصعب
+    const noButton = document.getElementById("no");
+    const box = document.getElementById("box");
+    const boxRect = box.getBoundingClientRect();
+    const buttonRect = noButton.getBoundingClientRect();
+
+    let newLeft = Math.random() * (boxRect.width - buttonRect.width);
+    let newTop = Math.random() * (boxRect.height - buttonRect.height);
+
+    noButton.style.left = newLeft + "px";
+    noButton.style.top = newTop + "px";
+  });
 </script>
 
 </body>
