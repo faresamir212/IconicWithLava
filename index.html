@@ -65,7 +65,9 @@ body{
   min-height:100vh;
   flex-direction:column;
   align-items:center;
-  overflow: auto;
+  overflow-y: auto; /* Vertical scroll */
+  max-height: 100vh; /* Fixed height for scroll */
+  padding: 20px; /* Added padding for better spacing */
 }
 
 .box{
@@ -139,7 +141,7 @@ video{
   font-weight:bold;
   text-align:center;
   margin-top:20px;
-  visibility: hidden; /* Will be set to visible in JS */
+  visibility: hidden;
 }
 
 /* Dark overlay for timer expiry */
@@ -283,8 +285,8 @@ video{
 <div class="secretMsg" id="secretMsgPage">
   <div class="box">
     <h1>Secret Message 🤎</h1>
-    <img id="image1" src="./image1.jpg" alt="Image 1" onerror="handleImageError('image1')">
-    <img id="image2" src="./image2.jpg" alt="Image 2" onerror="handleImageError('image2')">
+    <img id="image1" src="https://via.placeholder.com/200x200/ff9a9e/fad0c4?text=Image+1" alt="Image 1" onload="showImage('image1')" onerror="handleImageError('image1')">
+    <img id="image2" src="https://via.placeholder.com/200x200/ff9a9e/fad0c4?text=Image+2" alt="Image 2" onload="showImage('image2')" onerror="handleImageError('image2')">
     <div class="fallback" id="fallbackMsg">Images not found – but here's the love! 🤎</div>
     <div class="custom-text">Always together Forever sfoola 🤎</div>
     <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div>
@@ -368,7 +370,7 @@ document.getElementById("yes").onclick = function() {
 };
 
 document.getElementById("watchVideo").onclick = function() {
-  console.log("Watch Video clicked"); // Debug
+  console.log("Watch Video clicked");
   document.getElementById("options").style.display = "none";
   document.getElementById("valentineVideo").style.display = "block";
   document.getElementById("finalText1").style.display = "block";
@@ -391,6 +393,10 @@ document.getElementById("secretMsg").onclick = function() {
   document.getElementById("options").style.display = "none";
   document.getElementById("secretMsgPage").style.display = "flex";
 };
+
+function showImage(imgId) {
+  document.getElementById(imgId).style.display = "inline-block";
+}
 
 function handleImageError(imgId) {
   document.getElementById(imgId).style.display = "none";
