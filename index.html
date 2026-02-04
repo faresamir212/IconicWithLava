@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ICONIC 🤎 LAVA</title>
 
 <style>
 body{
-  margin:0;
   min-height:100vh;
+  margin:0;
   font-family:Arial,sans-serif;
   background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-  display:flex;
-  justify-content:center;
+  overflow:hidden;
 }
 
 /* PASSWORD */
@@ -20,22 +19,24 @@ body{
   position:fixed;
   inset:0;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  z-index:9999;
 }
+
 #passwordBox{
   background:#fff;
   padding:30px;
   border-radius:20px;
-  width:320px;
   text-align:center;
   box-shadow:0 10px 30px rgba(0,0,0,.2);
+  width:320px;
 }
-#danger{
-  color:#ff4d6d;
-  font-weight:bold;
-  margin-bottom:10px;
-}
+
+#passwordBox h2{color:#ff4d6d;}
+#passwordTimer{color:#ff4d6d;font-weight:bold;margin-bottom:10px;}
+
 #passwordBox input{
   width:100%;
   padding:12px;
@@ -43,71 +44,52 @@ body{
   border:1px solid #ccc;
   margin:15px 0;
 }
+
 #passwordBox button{
+  padding:12px 30px;
+  border:none;
+  border-radius:12px;
   background:#ff4d6d;
   color:#fff;
-  border:none;
-  padding:12px 30px;
-  border-radius:12px;
   cursor:pointer;
 }
 
-/* MAIN BOX */
-.page{
+/* MAIN */
+#mainContent{
   display:none;
-  width:100%;
-  justify-content:center;
+  min-height:100vh;
+  flex-direction:column;
+  align-items:center;
 }
+
 .box{
   background:#fff;
-  margin-top:40px;
   padding:30px;
   border-radius:20px;
-  width:360px;
-  max-width:90%;
   text-align:center;
   box-shadow:0 10px 30px rgba(0,0,0,.2);
+  width:360px;
+  max-width:90%;
+  margin-top:40px;
   position:relative;
 }
 
-h1{color:#ff4d6d}
+h1{color:#ff4d6d;}
+.emojis{font-size:28px;}
+.counter{font-size:14px;}
+.timer{color:#ff4d6d;font-weight:bold;}
 
 button{
-  padding:14px 30px;
-  border:none;
-  border-radius:12px;
+  padding:15px 35px;
   font-size:18px;
+  border-radius:12px;
+  border:none;
   cursor:pointer;
   margin:10px;
 }
 
-#yes{background:#ff4d6d;color:white}
-#no{
-  background:#aaa;
-  color:white;
-  position:absolute;
-  top:10px;
-  left:10px;
-}
-
-/* OPTIONS */
-#yesOptions{display:none}
-
-/* SECRET PAGE */
-#secretPage img{
-  width:45%;
-  border-radius:12px;
-  border:2px solid #ff4d6d;
-}
-#secretPage video{
-  width:100%;
-  border-radius:15px;
-  margin:20px 0;
-}
-.secret-text{
-  color:#ff4d6d;
-  font-size:18px;
-}
+#yes{background:#ff4d6d;color:white;}
+#no{background:#aaa;color:white;position:absolute}
 
 /* SHAKE */
 @keyframes shake{
@@ -118,6 +100,93 @@ button{
   100%{transform:translateX(0)}
 }
 .shake{animation:shake .4s}
+
+/* HEARTS */
+.heart{
+  position:fixed;
+  top:-10%;
+  font-size:24px;
+  animation:fall 3s linear forwards;
+}
+@keyframes fall{
+  to{top:110%;opacity:0}
+}
+
+video{
+  width:90%;
+  max-width:600px;
+  margin:30px auto;
+  display:none;
+  border-radius:20px;
+}
+
+.final-text{
+  display:none;
+  font-size:22px;
+  color:#ff4d6d;
+  font-weight:bold;
+  text-align:center;
+}
+
+/* Dark overlay for timer expiry */
+#darkOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* Options after Yes */
+.options {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.options button {
+  margin: 10px;
+}
+
+/* Secret Msg page */
+.secretMsg {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.secretMsg .box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  width: 90%;
+  max-width: 600px;
+}
+
+.secretMsg img {
+  width: 45%;
+  max-width: 200px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+.secretMsg .hearts {
+  font-size: 28px;
+  margin-top: 20px;
+}
 </style>
 </head>
 
@@ -126,91 +195,166 @@ button{
 <!-- PASSWORD -->
 <div id="passwordScreen">
   <div id="passwordBox">
-    <div id="danger">⚠️ LAVA IN DANGER</div>
+    <div id="passwordTimer">HURRY LAVA IN DANGER</div>
     <h2>Enter Password 🤎</h2>
-    <input type="password" id="passwordInput">
+    <input type="password" id="passwordInput" placeholder="Password">
     <button onclick="checkPassword()">Enter</button>
   </div>
 </div>
 
-<!-- MAIN PAGE -->
-<div id="mainPage" class="page">
-  <div class="box" id="mainBox">
-    <h1>Will you be my Valentine? 🤎</h1>
-    <p>🤎🥹</p>
+<!-- Dark overlay for timer expiry -->
+<div id="darkOverlay" onclick="resetTimer()">
+  <h1>LAVA اختفت 😱</h1>
+  <p>الحل الوحيد؟ YES 🤎<br>(Click to try again)</p>
+</div>
 
-    <p>محاولات الرفض: <span id="count">0</span></p>
+<!-- MAIN -->
+<div id="mainContent">
+
+  <div class="box" id="box">
+    <h1>Will you be my Valentine? 🤎</h1>
+    <div class="emojis">🤎🥹</div>
+
+    <div class="counter">
+      محاولات الرفض: <span id="count">0</span>
+    </div>
+
+    <div class="timer">
+      مستوى الحب 🤎: <span id="love">100</span>%
+    </div>
+
+    <div id="message" style="margin-top:10px;font-weight:bold;color:#ff4d6d"></div>
 
     <button id="yes">Yes</button>
     <button id="no">No</button>
   </div>
 
-  <div class="box" id="yesOptions">
-    <h2>Choose Your Secret 🤎</h2>
-    <button onclick="openSecret()">Secret Msg 🤎</button>
+  <!-- Options after Yes -->
+  <div class="options" id="options">
+    <button id="watchVideo">Watch Video</button>
+    <button id="secretMsg">Secret Msg</button>
   </div>
+
+  <video id="valentineVideo" controls muted>
+    <source src="./video.mp4" type="video/mp4">
+    Your browser does not support the video tag or the video failed to load.
+  </video>
+
+  <div class="final-text" id="finalText1">
+    NO MATTER WHAT HAPPENED<br>IM ALWAYS WITH YOU
+  </div>
+
+  <div class="final-text" id="finalText2">
+    ICONIC WITH LAVA FOREVER 🤎
+  </div>
+
 </div>
 
-<!-- SECRET PAGE -->
-<div id="secretPage" class="page">
+<!-- Secret Msg Page -->
+<div class="secretMsg" id="secretMsgPage">
   <div class="box">
-    <h1>🤎 Secret Message</h1>
-
-    <div style="display:flex;gap:10px;justify-content:center">
-      <img src="./img1.jpg">
-      <img src="./img2.jpg">
-    </div>
-
-    <video controls>
-      <source src="./secret-video.mp4" type="video/mp4">
-    </video>
-
-    <div class="secret-text">
-      🤎 this message is only for you <br>
-      no one else will ever see this
-    </div>
-
-    <button onclick="back()">Back</button>
+    <h1>Secret Message 🤎</h1>
+    <img src="./image1.jpg" alt="Image 1"> <!-- Replace with your image path -->
+    <img src="./image2.jpg" alt="Image 2"> <!-- Replace with your image path -->
+    <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div> <!-- Static hearts -->
   </div>
 </div>
 
 <script>
-const password="iconiclava";
-let count=0;
+const CORRECT_PASSWORD = "iconiclava";
+const box = document.getElementById("box");
 
-function checkPassword(){
-  if(passwordInput.value===password){
-    passwordScreen.style.display="none";
-    mainPage.style.display="flex";
-  }else alert("Wrong password 😜");
+let noCount = 0;
+let love = 100;
+let timeLeft = 10;
+let timer;
+
+const messages = [
+  "متأكد؟ 🥺",
+  "قلبي بيتكسر 🤎",
+  "ده اختيار صعب 😭",
+  "زر No شكله مكسور 😤",
+  "آخر تحذير 😈"
+];
+
+function checkPassword() {
+  const val = document.getElementById("passwordInput").value;
+  if (val === CORRECT_PASSWORD) {
+    document.getElementById("passwordScreen").style.display = "none";
+    document.getElementById("mainContent").style.display = "flex";
+    startTimer();
+  } else {
+    alert("Wrong password 😜");
+  }
 }
 
-/* NO BUTTON MOVE */
-no.onclick=()=>{
-  count++;
-  document.getElementById("count").textContent=count;
-  no.style.top=Math.random()*200+"px";
-  no.style.left=Math.random()*200+"px";
-  mainBox.classList.add("shake");
-  setTimeout(()=>mainBox.classList.remove("shake"),400);
+function startTimer() {
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById("yes").style.transform = "scale(" + (1 + (10 - timeLeft) * 0.05) + ")";
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      document.getElementById("darkOverlay").style.display = "flex";
+    }
+  }, 1000);
 }
 
-yes.onclick=()=>{
-  mainBox.style.display="none";
-  yesOptions.style.display="block";
+function resetTimer() {
+  document.getElementById("darkOverlay").style.display = "none";
+  timeLeft = 10;
+  document.getElementById("yes").style.transform = "scale(1)";
+  startTimer();
 }
 
-function openSecret(){
-  mainPage.style.display="none";
-  secretPage.style.display="flex";
-}
+document.getElementById("no").onclick = function() {
+  noCount++;
+  love = Math.max(0, love - 15);
 
-function back(){
-  secretPage.style.display="none";
-  mainPage.style.display="flex";
-  mainBox.style.display="block";
-  yesOptions.style.display="none";
-}
+  document.getElementById("count").textContent = noCount;
+  document.getElementById("love").textContent = love;
+  document.getElementById("message").textContent = messages[Math.min(noCount - 1, messages.length - 1)];
+
+  box.classList.add("shake");
+  setTimeout(() => box.classList.remove("shake"), 400);
+
+  // Move button for all clicks (no special trigger for upload page)
+  const boxRect = box.getBoundingClientRect();
+  const buttonWidth = this.offsetWidth;
+  const buttonHeight = this.offsetHeight;
+  const maxLeft = boxRect.width - buttonWidth - 20;
+  const maxTop = boxRect.height - buttonHeight - 20;
+  this.style.left = Math.random() * Math.max(0, maxLeft) + "px";
+  this.style.top = Math.random() * Math.max(0, maxTop) + "px";
+};
+
+document.getElementById("yes").onclick = function() {
+  clearInterval(timer);
+  box.style.display = "none";
+  document.getElementById("options").style.display = "flex"; // Show options
+};
+
+document.getElementById("watchVideo").onclick = function() {
+  document.getElementById("options").style.display = "none";
+  document.getElementById("valentineVideo").style.display = "block";
+  document.getElementById("finalText1").style.display = "block";
+  document.getElementById("finalText2").style.display = "block";
+
+  const heartCount = window.innerWidth < 600 ? 15 : 30;
+  for (let i = 0; i < heartCount; i++) {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = "🤎";
+    h.style.left = Math.random() * 100 + "%";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 3000);
+  }
+};
+
+document.getElementById("secretMsg").onclick = function() {
+  document.getElementById("options").style.display = "none";
+  document.getElementById("secretMsgPage").style.display = "flex";
+};
 </script>
 
 </body>
