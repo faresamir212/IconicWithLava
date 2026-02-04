@@ -146,17 +146,18 @@ video{
 /* YES OPTIONS MENU */
 #yesOptions{
   display:none;
-  text-align:center;
-  margin-top:20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top:50px;
 }
-
 #yesOptions button{
   margin:10px;
-  padding:12px 25px;
-  border-radius:10px;
+  padding:15px 30px;
+  font-size:18px;
+  border-radius:12px;
   border:none;
   cursor:pointer;
-  font-size:16px;
 }
 
 /* New Page */
@@ -377,8 +378,9 @@ no.onclick=function(){
 
 // YES button → show options
 yes.onclick=function(){
+  clearInterval(timer);
   box.style.display="none";
-  yesOptions.style.display="block";
+  yesOptions.style.display="flex";
 };
 
 // OPTION 1: existing video
