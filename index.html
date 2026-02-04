@@ -118,7 +118,7 @@
     }
 
     .final-text {
-      font-size: 24px;
+      font-size: 18px; /* Reduced from 24px for better fit */
       font-weight: bold;
       color: #ff4d6d;
       display: none; /* Initially hidden */
@@ -145,8 +145,9 @@
   </div>
 
   <!-- النص النهائي فوق الفيديو -->
-<div class="final-text" id="finalText">NO MATTER WHAT HAPPENED IM ALWAYS WITH YOU</div>
-    <div class="final-text" id="finalText"> ICONIC with LAVA FOREVER🤎</div>
+  <div class="final-text" id="finalText1">NO MATTER WHAT HAPPENED IM ALWAYS WITH YOU</div>
+  <div class="final-text" id="finalText2">ICONIC with LAVA FOREVER🤎</div>
+
   <video id="valentineVideo" controls>
     <source src="path/to/your/video.mp4" type="video/mp4">
     Your browser does not support the video tag.
@@ -161,7 +162,8 @@
     const timeSpan = document.getElementById('time');
     const box = document.getElementById('box');
     const video = document.getElementById('valentineVideo');
-    const finalText = document.getElementById('finalText');
+    const finalText1 = document.getElementById('finalText1');
+    const finalText2 = document.getElementById('finalText2');
 
     // Function to check if device is mobile
     function isMobile() {
@@ -213,7 +215,8 @@
       clearInterval(timer); // Stop the timer
       // Hide the box, show the final text and video
       box.classList.add('hidden');
-      finalText.style.display = 'block';
+      finalText1.style.display = 'block';
+      finalText2.style.display = 'block';
       video.style.display = 'block';
       // Trigger confetti
       for (let i = 0; i < 100; i++) {
