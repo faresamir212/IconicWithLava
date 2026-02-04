@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ICONIC 🤎 LAVA</title>
+
 <style>
 body{
   min-height:100vh;
@@ -116,13 +117,16 @@ button{
   position:fixed;
   top:-10%;
   font-size:24px;
+  animation:fall 3s linear forwards, fade 3s;
   opacity:0;
-  animation:fallFade 3s linear forwards;
 }
-@keyframes fallFade{
-  0%{top:-10%;opacity:0}
+@keyframes fall{
+  to{top:110%;opacity:1}
+}
+@keyframes fade{
+  0%{opacity:0}
   50%{opacity:1}
-  100%{top:110%;opacity:0}
+  100%{opacity:0}
 }
 
 video{
@@ -140,7 +144,6 @@ video{
   font-weight:bold;
   text-align:center;
   margin-top:20px;
-  visibility: hidden;
 }
 
 /* Dark overlay for timer expiry */
@@ -190,9 +193,8 @@ video{
   box-shadow: 0 10px 30px rgba(0,0,0,.2);
   width: 90%;
   max-width: 600px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  opacity:0;
+  animation: fadeIn 1s forwards;
 }
 
 .secretMsg img {
@@ -219,6 +221,11 @@ video{
   color: #ff4d6d;
   font-weight: bold;
   display: none;
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
 }
 </style>
 </head>
@@ -270,7 +277,7 @@ video{
 
   <video id="valentineVideo" controls muted>
     <source src="./video.mp4" type="video/mp4">
-    Your browser does not support the video tag or the video failed to load.
+    Your browser does not support the video tag.
   </video>
 
   <div class="final-text" id="finalText1">
@@ -287,11 +294,11 @@ video{
 <div class="secretMsg" id="secretMsgPage">
   <div class="box">
     <h1>Secret Message 🤎</h1>
-    <img id="image1" src="./images/image1.png" alt="Image 1" onerror="handleImageError('image1')">
-    <img id="image2" src="./images/image2.png" alt="Image 2" onerror="handleImageError('image2')">
+    <img id="image1" src="image1.png" alt="Image 1">
+    <img id="image2" src="image2.png" alt="Image 2">
     <div class="fallback" id="fallbackMsg">Images not found – but here's the love! 🤎</div>
     <div class="custom-text">Always together Forever sfoola 🤎</div>
-    <div class="hearts" id="secretHearts"></div>
+    <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div>
     <button onclick="goBackFromSecret()">Back</button>
   </div>
 </div>
@@ -299,10 +306,12 @@ video{
 <script>
 const CORRECT_PASSWORD = "iconiclava";
 const box = document.getElementById("box");
+
 let noCount = 0;
 let love = 100;
 let timeLeft = 10;
 let timer;
+
 const messages = [
   "متأكد؟ 🥺",
   "قلبي بيتكسر 🤎",
@@ -313,109 +322,102 @@ const messages = [
 
 function checkPassword() {
   const val = document.getElementById("passwordInput").value;
-  if(val===CORRECT_PASSWORD){
-    document.getElementById("passwordScreen").style.display="none";
-    document.getElementById("mainContent").style.display="flex";
+  if (val === CORRECT_PASSWORD) {
+    document.getElementById("passwordScreen").style.display = "none";
+    document.getElementById("mainContent").style.display = "flex";
     startTimer();
-  }else{
+  } else {
     alert("Wrong password 😜");
   }
 }
 
-function startTimer(){
-  timer = setInterval(()=>{
+function startTimer() {
+  timer = setInterval(() => {
     timeLeft--;
-    document.getElementById("yes").style.transform="scale("+(1+(10-timeLeft)*0.05)+")";
-    if(timeLeft<=0){
+    document.getElementById("yes").style.transform = "scale(" + (1 + (10 - timeLeft) * 0.05) + ")";
+
+    if (timeLeft <= 0) {
       clearInterval(timer);
-      document.getElementById("darkOverlay").style.display="flex";
+      document.getElementById("darkOverlay").style.display = "flex";
     }
-  },1000);
+  }, 1000);
 }
 
-function resetTimer(){
-  document.getElementById("darkOverlay").style.display="none";
-  timeLeft=10;
-  document.getElementById("yes").style.transform="scale(1)";
+function resetTimer() {
+  document.getElementById("darkOverlay").style.display = "none";
+  timeLeft = 10;
+  document.getElementById("yes").style.transform = "scale(1)";
   startTimer();
 }
 
-document.getElementById("no").onclick=function(){
+document.getElementById("no").onclick = function() {
   noCount++;
-  love = Math.max(0,love-15);
-  document.getElementById("count").textContent=noCount;
-  document.getElementById("love").textContent=love;
-  document.getElementById("message").textContent=messages[Math.min(noCount-1,messages.length-1)];
+  love = Math.max(0, love - 15);
+
+  document.getElementById("count").textContent = noCount;
+  document.getElementById("love").textContent = love;
+  document.getElementById("message").textContent = messages[Math.min(noCount - 1, messages.length - 1)];
+
   box.classList.add("shake");
-  setTimeout(()=>box.classList.remove("shake"),400);
-  const boxRect=box.getBoundingClientRect();
-  const btn=this;
-  const buttonWidth=btn.offsetWidth;
-  const buttonHeight=btn.offsetHeight;
-  const maxLeft=boxRect.width-buttonWidth-20;
-  const maxTop=boxRect.height-buttonHeight-20;
-  const newLeft=Math.random()*Math.max(0,maxLeft);
-  const newTop=Math.random()*Math.max(0,maxTop);
-  btn.style.left=newLeft+"px";
-  btn.style.top=newTop+"px";
+  setTimeout(() => box.classList.remove("shake"), 400);
+
+  const boxRect = box.getBoundingClientRect();
+  const buttonWidth = this.offsetWidth;
+  const buttonHeight = this.offsetHeight;
+  const maxLeft = boxRect.width - buttonWidth - 20;
+  const maxTop = boxRect.height - buttonHeight - 20;
+  const newLeft = Math.random() * Math.max(0, maxLeft);
+  const newTop = Math.random() * Math.max(0, maxTop);
+  this.style.left = newLeft + "px";
+  this.style.top = newTop + "px";
 };
 
-document.getElementById("yes").onclick=function(){
+document.getElementById("yes").onclick = function() {
   clearInterval(timer);
-  box.style.display="none";
-  document.getElementById("options").style.display="flex";
+  box.style.display = "none";
+  document.getElementById("options").style.display = "flex";
 };
 
-document.getElementById("watchVideo").onclick=function(){
-  document.getElementById("options").style.display="none";
-  document.getElementById("valentineVideo").style.display="block";
-  document.getElementById("finalText1").style.display="block";
-  document.getElementById("finalText1").style.visibility="visible";
-  document.getElementById("finalText2").style.display="block";
-  document.getElementById("finalText2").style.visibility="visible";
+document.getElementById("watchVideo").onclick = function() {
+  document.getElementById("options").style.display = "none";
+  document.getElementById("valentineVideo").style.display = "block";
+  document.getElementById("finalText1").style.display = "block";
+  document.getElementById("finalText2").style.display = "block";
 
-  const heartCount=window.innerWidth<600?15:30;
-  for(let i=0;i<heartCount;i++){
-    const h=document.createElement("div");
-    h.className="heart";
-    h.textContent="🤎";
-    h.style.left=Math.random()*100+"%";
+  const heartCount = window.innerWidth < 600 ? 15 : 30;
+  for (let i = 0; i < heartCount; i++) {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = "🤎";
+    h.style.left = Math.random() * 100 + "%";
     document.body.appendChild(h);
-    setTimeout(()=>h.remove(),3000);
+    setTimeout(() => h.remove(), 3000);
   }
 };
 
-document.getElementById("secretMsg").onclick=function(){
-  document.getElementById("options").style.display="none";
-  document.getElementById("secretMsgPage").style.display="flex";
+document.getElementById("secretMsg").onclick = function() {
+  document.getElementById("options").style.display = "none";
+  document.getElementById("secretMsgPage").style.display = "flex";
 
-  // إضافة قلوب متساقطة
-  const secretHearts=document.getElementById("secretHearts");
-  secretHearts.innerHTML="";
-  const heartCount=window.innerWidth<600?10:20;
+  // Fade-in hearts
+  const heartsDiv = document.querySelector("#secretMsgPage .hearts");
+  heartsDiv.innerHTML = "";
+  const heartCount = 20;
   for(let i=0;i<heartCount;i++){
-    const h=document.createElement("span");
+    const h = document.createElement("span");
     h.textContent="🤎";
     h.style.opacity=0;
-    h.style.animation="fadeIn 3s ease forwards";
-    h.style.margin="0 2px";
-    secretHearts.appendChild(h);
+    h.style.margin="2px";
+    h.style.animation = `fade 3s ease ${i*0.1}s forwards`;
+    heartsDiv.appendChild(h);
   }
 };
 
-function showImage(imgId){
-  document.getElementById(imgId).style.display="inline-block";
-}
-
-function handleImageError(imgId){
-  document.getElementById(imgId).style.display="none";
-  document.getElementById("fallbackMsg").style.display="block";
-}
-
-function goBackFromSecret(){
-  document.getElementById("secretMsgPage").style.display="none";
-  document.getElementById("options").style.display="flex";
+function goBackFromSecret() {
+  document.getElementById("secretMsgPage").style.display = "none";
+  document.getElementById("options").style.display = "flex";
 }
 </script>
+
 </body>
 </html>
