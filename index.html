@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ICONIC 🤎 LAVA</title>
 
 <style>
@@ -24,7 +24,6 @@ body{
   background:linear-gradient(135deg,#ff9a9e,#fad0c4);
   z-index:9999;
 }
-
 #passwordBox{
   background:#fff;
   padding:30px;
@@ -33,7 +32,6 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.2);
   width:320px;
 }
-
 #passwordBox h2{color:#ff4d6d;}
 #passwordTimer{
   color:#ff4d6d;
@@ -41,7 +39,6 @@ body{
   margin-bottom:10px;
   display:block;
 }
-
 #passwordBox input{
   width:100%;
   padding:12px;
@@ -49,7 +46,6 @@ body{
   border:1px solid #ccc;
   margin:15px 0;
 }
-
 #passwordBox button{
   padding:12px 30px;
   border:none;
@@ -65,10 +61,9 @@ body{
   min-height:100vh;
   flex-direction:column;
   align-items:center;
-  overflow-y:auto;
-  padding:20px;
+  overflow-y: auto;
+  padding: 20px;
 }
-
 .box{
   background:#fff;
   padding:30px;
@@ -80,12 +75,10 @@ body{
   margin-top:40px;
   position:relative;
 }
-
 h1{color:#ff4d6d;}
 .emojis{font-size:28px;}
 .counter{font-size:14px;}
 .timer{color:#ff4d6d;font-weight:bold;}
-
 button{
   padding:15px 35px;
   font-size:18px;
@@ -94,12 +87,13 @@ button{
   cursor:pointer;
   margin:10px;
 }
-
 #yes{background:#ff4d6d;color:white;}
 #no{
   background:#aaa;
   color:white;
   position:absolute;
+  left: auto;
+  top: auto;
 }
 
 /* SHAKE */
@@ -117,16 +111,17 @@ button{
   position:fixed;
   top:-10%;
   font-size:24px;
-  animation:fall 3s linear forwards, fade 3s;
-  opacity:0;
+  animation:fall 3s linear forwards;
 }
 @keyframes fall{
-  to{top:110%;opacity:1}
+  to{top:110%;opacity:0}
 }
-@keyframes fade{
-  0%{opacity:0}
-  50%{opacity:1}
-  100%{opacity:0}
+.fade-in{
+  opacity:0;
+  animation: fadeIn 1s forwards;
+}
+@keyframes fadeIn{
+  to{opacity:1;}
 }
 
 video{
@@ -144,6 +139,7 @@ video{
   font-weight:bold;
   text-align:center;
   margin-top:20px;
+  visibility: hidden;
 }
 
 /* Dark overlay for timer expiry */
@@ -193,8 +189,6 @@ video{
   box-shadow: 0 10px 30px rgba(0,0,0,.2);
   width: 90%;
   max-width: 600px;
-  opacity:0;
-  animation: fadeIn 1s forwards;
 }
 
 .secretMsg img {
@@ -203,11 +197,16 @@ video{
   margin: 10px;
   border-radius: 10px;
   display: inline-block;
+  opacity:0;
+  animation: fadeIn 1s forwards;
+  animation-delay: 0.5s;
 }
 
 .secretMsg .hearts {
   font-size: 28px;
   margin-top: 20px;
+  opacity:0;
+  animation: fadeIn 2s forwards;
 }
 
 .secretMsg .custom-text {
@@ -215,17 +214,14 @@ video{
   color: #ff4d6d;
   font-weight: bold;
   margin-top: 20px;
+  opacity:0;
+  animation: fadeIn 1.5s forwards;
 }
 
 .secretMsg .fallback {
   color: #ff4d6d;
   font-weight: bold;
   display: none;
-}
-
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
 }
 </style>
 </head>
@@ -250,21 +246,16 @@ video{
 
 <!-- MAIN -->
 <div id="mainContent">
-
   <div class="box" id="box">
     <h1>Will you be my Valentine? 🤎</h1>
     <div class="emojis">🤎🥹</div>
-
     <div class="counter">
       محاولات الرفض: <span id="count">0</span>
     </div>
-
     <div class="timer">
       مستوى الحب 🤎: <span id="love">100</span>%
     </div>
-
     <div id="message" style="margin-top:10px;font-weight:bold;color:#ff4d6d"></div>
-
     <button id="yes">Yes</button>
     <button id="no">No</button>
   </div>
@@ -277,7 +268,7 @@ video{
 
   <video id="valentineVideo" controls muted>
     <source src="./video.mp4" type="video/mp4">
-    Your browser does not support the video tag.
+    Your browser does not support the video tag or the video failed to load.
   </video>
 
   <div class="final-text" id="finalText1">
@@ -294,8 +285,8 @@ video{
 <div class="secretMsg" id="secretMsgPage">
   <div class="box">
     <h1>Secret Message 🤎</h1>
-    <img id="image1" src="image1.png" alt="Image 1">
-    <img id="image2" src="image2.png" alt="Image 2">
+    <img id="image1" src="image1.png" alt="Image 1" onerror="handleImageError('image1')">
+    <img id="image2" src="image2.png" alt="Image 2" onerror="handleImageError('image2')">
     <div class="fallback" id="fallbackMsg">Images not found – but here's the love! 🤎</div>
     <div class="custom-text">Always together Forever sfoola 🤎</div>
     <div class="hearts">🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎 🤎</div>
@@ -322,7 +313,7 @@ const messages = [
 
 function checkPassword() {
   const val = document.getElementById("passwordInput").value;
-  if (val === CORRECT_PASSWORD) {
+  if(val === CORRECT_PASSWORD){
     document.getElementById("passwordScreen").style.display = "none";
     document.getElementById("mainContent").style.display = "flex";
     startTimer();
@@ -335,89 +326,87 @@ function startTimer() {
   timer = setInterval(() => {
     timeLeft--;
     document.getElementById("yes").style.transform = "scale(" + (1 + (10 - timeLeft) * 0.05) + ")";
-
-    if (timeLeft <= 0) {
+    if(timeLeft <= 0){
       clearInterval(timer);
       document.getElementById("darkOverlay").style.display = "flex";
     }
-  }, 1000);
+  },1000);
 }
 
-function resetTimer() {
+function resetTimer(){
   document.getElementById("darkOverlay").style.display = "none";
-  timeLeft = 10;
-  document.getElementById("yes").style.transform = "scale(1)";
+  timeLeft=10;
+  document.getElementById("yes").style.transform="scale(1)";
   startTimer();
 }
 
-document.getElementById("no").onclick = function() {
+document.getElementById("no").onclick = function(){
   noCount++;
-  love = Math.max(0, love - 15);
-
-  document.getElementById("count").textContent = noCount;
-  document.getElementById("love").textContent = love;
-  document.getElementById("message").textContent = messages[Math.min(noCount - 1, messages.length - 1)];
+  love = Math.max(0,love-15);
+  document.getElementById("count").textContent=noCount;
+  document.getElementById("love").textContent=love;
+  document.getElementById("message").textContent=messages[Math.min(noCount-1,messages.length-1)];
 
   box.classList.add("shake");
-  setTimeout(() => box.classList.remove("shake"), 400);
+  setTimeout(()=>box.classList.remove("shake"),400);
 
+  // Move NO button randomly
   const boxRect = box.getBoundingClientRect();
   const buttonWidth = this.offsetWidth;
   const buttonHeight = this.offsetHeight;
   const maxLeft = boxRect.width - buttonWidth - 20;
   const maxTop = boxRect.height - buttonHeight - 20;
-  const newLeft = Math.random() * Math.max(0, maxLeft);
-  const newTop = Math.random() * Math.max(0, maxTop);
-  this.style.left = newLeft + "px";
-  this.style.top = newTop + "px";
+  const newLeft = Math.random()*Math.max(0,maxLeft);
+  const newTop = Math.random()*Math.max(0,maxTop);
+  this.style.left = newLeft+"px";
+  this.style.top = newTop+"px";
 };
 
-document.getElementById("yes").onclick = function() {
+document.getElementById("yes").onclick = function(){
   clearInterval(timer);
-  box.style.display = "none";
-  document.getElementById("options").style.display = "flex";
+  box.style.display="none";
+  document.getElementById("options").style.display="flex";
 };
 
-document.getElementById("watchVideo").onclick = function() {
-  document.getElementById("options").style.display = "none";
-  document.getElementById("valentineVideo").style.display = "block";
-  document.getElementById("finalText1").style.display = "block";
-  document.getElementById("finalText2").style.display = "block";
+// Option 1 - Video + Hearts Fade
+document.getElementById("watchVideo").onclick=function(){
+  document.getElementById("options").style.display="none";
+  document.getElementById("valentineVideo").style.display="block";
+  document.getElementById("finalText1").style.display="block";
+  document.getElementById("finalText1").style.visibility="visible";
+  document.getElementById("finalText2").style.display="block";
+  document.getElementById("finalText2").style.visibility="visible";
 
-  const heartCount = window.innerWidth < 600 ? 15 : 30;
-  for (let i = 0; i < heartCount; i++) {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.textContent = "🤎";
-    h.style.left = Math.random() * 100 + "%";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 3000);
-  }
-};
-
-document.getElementById("secretMsg").onclick = function() {
-  document.getElementById("options").style.display = "none";
-  document.getElementById("secretMsgPage").style.display = "flex";
-
-  // Fade-in hearts
-  const heartsDiv = document.querySelector("#secretMsgPage .hearts");
-  heartsDiv.innerHTML = "";
-  const heartCount = 20;
+  const heartCount = window.innerWidth<600?15:30;
   for(let i=0;i<heartCount;i++){
-    const h = document.createElement("span");
+    const h=document.createElement("div");
+    h.className="heart fade-in";
     h.textContent="🤎";
-    h.style.opacity=0;
-    h.style.margin="2px";
-    h.style.animation = `fade 3s ease ${i*0.1}s forwards`;
-    heartsDiv.appendChild(h);
+    h.style.left=Math.random()*100+"%";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),3000);
   }
 };
 
-function goBackFromSecret() {
-  document.getElementById("secretMsgPage").style.display = "none";
-  document.getElementById("options").style.display = "flex";
+// Option 2 - Secret Msg
+document.getElementById("secretMsg").onclick=function(){
+  document.getElementById("options").style.display="none";
+  document.getElementById("secretMsgPage").style.display="flex";
+  // Animate hearts fade
+  document.querySelectorAll(".secretMsg .hearts")[0].classList.add("fade-in");
+  document.querySelectorAll(".secretMsg img").forEach(img=>img.classList.add("fade-in"));
+  document.querySelectorAll(".secretMsg .custom-text")[0].classList.add("fade-in");
+};
+
+function handleImageError(imgId){
+  document.getElementById(imgId).style.display="none";
+  document.getElementById("fallbackMsg").style.display="block";
+}
+
+function goBackFromSecret(){
+  document.getElementById("secretMsgPage").style.display="none";
+  document.getElementById("options").style.display="flex";
 }
 </script>
-
 </body>
 </html>
